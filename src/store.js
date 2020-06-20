@@ -29,6 +29,7 @@ const store=new Vuex.Store({
 		desktop_users:[
 			// {i:0,u_i:0,name:"name",date:"2020-05-05"}
 		],
+		desktop_liangbiao_times:1,
 
 		login_name:"",
 		login_sex:"",
@@ -70,6 +71,7 @@ const store=new Vuex.Store({
 		desktop_user_load(state,payload){
 			state.desktop_zhanghao=payload.user;
 			state.desktop_users=payload.users;
+			state.desktop_liangbiao_times=payload.liangbiao_times;
 		},
 
 		login_init_set(state,payload){

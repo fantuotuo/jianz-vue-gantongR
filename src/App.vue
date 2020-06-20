@@ -1,10 +1,34 @@
 <template>
 	<div id="app" v-loading.fullscreen='loading'>
-		<el-menu :defaultActive="this.$route.path" router class='el-menu-demo' mode='horizontal'>
+		<el-menu 
+			:defaultActive="this.$route.path" 
+			router 
+			class='el-menu-demo' 
+			mode='horizontal'
+			background-color='#32b16c'
+			text-color='#fff'
+			active-text-color='#f3f710'
+		>
 			<div class="el-menu--horizontal layout">
-				<el-menu-item v-for='(item,key) in navList' :key='key' :index='item.name' :disabled='item.disabled'>
-					{{item.label}}
+				<el-menu-item index='/desktop'>
+					切换量表
 				</el-menu-item>
+				<el-menu-item index='/login'>
+					新增量表
+				</el-menu-item>
+				<el-menu-item index='/fangan'>
+					训练方案
+				</el-menu-item>
+				<el-menu-item v-if='desktop_zhanghao===""' class='gt-submenu-right' index='zhanghao0' v-on:click='toLogin' >
+					未登录
+				</el-menu-item>
+				<el-submenu v-else class='gt-submenu-right' index='zhanghao1'>
+					<template slot='title'>
+						<i class='el-icon-user-solid'></i>
+						{{desktop_zhanghao}}
+					</template>
+					<el-menu-item v-on:click='toLogout'>退出此账号</el-menu-item>
+				</el-submenu>
 			</div>
 		</el-menu>
 	
@@ -20,17 +44,65 @@ export default {
 	name: 'app',
 	computed:{
 		...mapState({
-			loading:state=>state.loading
+			loading:state=>state.loading,
+			desktop_zhanghao:state=>state.desktop_zhanghao
 		})
 	},
-	data:function(){
-		return {
-			navList:[
-				{name:"/desktop",label:"切换用户"},
-				{name:"/login",label:"填写量表"},
-				{name:"/fangan",label:"训练方案",disabled:false},
-				{name:"/logout",label:"退出"},
-			]
+	// 创建完成后获取用户初始数据
+	created:function(){
+		console.log("app created");
+
+		this.axios.get("./api/vueGetUserList.aspx")
+			.then(response=>{
+				let ret=response.data;
+
+				if(ret.unLogin===true){
+					// 未登录
+					location.href='/gt/';
+				}else{
+					this.$store.commit("desktop_user_load",{
+						user:ret.user,
+						users:ret.users,
+						liangbiao_times:ret.times
+					});
+				}
+				this.loadingSet(false);
+			})
+			.catch(error=>{
+				alert("发送请求错误："+error);
+				this.loadingSet(false);
+			});
+		this.loadingSet(true);
+	},
+	methods:{
+		toLogin:function(){
+			location.href="/login.aspx?ReturnUrl=%2fgt%2f";
+		},
+		toLogout:function(){
+			this.axios.get("./api/vueLogout.aspx")
+				.then(response=>{
+					let ret=response.data;
+
+					if(ret.unLogin===true){
+						// 未登录
+						location.href='/gt/';
+					}else if(ret.code===1){
+						location.href="/login.aspx?ReturnUrl=%2fgt%2f";
+					}else{
+						alert("发送请求错误："+ret.msg);
+					}
+					this.loadingSet(false);
+				})
+				.catch(error=>{
+					alert("发送请求错误："+error);
+					this.loadingSet(false);
+				});
+			this.loadingSet(true);
+		},
+		loadingSet:function(bool){
+			this.$store.commit("loading_set",{
+				loading:bool
+			});
 		}
 	},
 	components: {
@@ -46,8 +118,20 @@ export default {
 
 </style>
 <style>
-.el-menu-demo{
+.el-menu--horizontal{
+	outline:none!important;
+}
+.el-menu{
 	margin-bottom:15px;
+}
+.el-submenu .el-icon-user-solid{
+	/*vertical-align: baseline;*/
+}
+.el-submenu__title i{
+	color:#fff;
+}
+.el-menu--horizontal .gt-submenu-right{
+	float:right;
 }
 /*#app {
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -57,4 +141,23 @@ export default {
 	color: #2c3e50;
 	margin-top: 60px;
 }*/
+html,body{
+	height:100%;
+}
+#app{
+	min-height:100%;
+	padding-bottom:80px;
+}
+.kt-app{
+	width:1280px;
+	margin:0 auto;
+}
+.kt-footer{
+	text-align:center;
+	padding: 20px 0;
+	font-size:0.875rem;
+    line-height: 20px;
+    height:80px;
+    margin-top:-80px;
+}
 </style>

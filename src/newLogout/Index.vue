@@ -18,7 +18,10 @@ export default{
 			.then(response=>{
 				let ret=response.data;
 
-				if(ret.code===1){
+				if(ret.unLogin===true){
+					// 未登录
+					location.href='/gt/';
+				}else if(ret.code===1){
 					// 保存路由，保证登陆后返回desktop
 					this.$router.push({"path":"desktop"});
 					window.location.reload();

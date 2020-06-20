@@ -8,6 +8,11 @@ public partial class gantong_api_vueLogout : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            Response.Redirect("./vueUnLogin.aspx");
+        }
+
         Response.Buffer = true;
 
         Response.ExpiresAbsolute = System.DateTime.Now.AddSeconds(-1);

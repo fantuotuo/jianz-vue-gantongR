@@ -3,7 +3,8 @@
 		<el-steps 
 			v-bind:active='step' 
 			class='gt-steps'
-			align-center
+			finish-status='success'
+			simple
 		>
 			<el-step title='个人信息'></el-step>
 			<el-step title='填写量表'></el-step>
@@ -33,7 +34,7 @@ export default{
 		}
 	},
 	created:function(){
-		console.log("login_created");
+		console.log("login created");
 		this.loadingSet(false);
 		this.$store.commit("login_init_set",{
 			name:"",
@@ -65,17 +66,20 @@ export default{
 			url+="&age="+this.$store.state.login_age;
 			url+="&remark="+this.$store.state.login_remark;
 			this.axios
-				.get(url)
+				.get(encodeURI(url))
 				.then(response=>{
 					let ret=response.data;
-					if(!ret) return;
-					if(ret.u_i>=0){
+
+					if(ret.unLogin===true){
+						// 未登录
+						location.href='/gt/';
+					}else if(ret.u_i>=0){
 						this.$router.push({
 							path:"fangan",query:{u_i:ret.u_i}
 						});
 						// window.location.href="../fangan?u_i="+ret.u_i;
 					}else{
-						alert(ret.msg+"请重新提交");
+						alert(ret.msg+"");
 						this.loadingSet(false);
 					}
 				})

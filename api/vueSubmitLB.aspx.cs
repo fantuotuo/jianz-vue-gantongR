@@ -14,6 +14,7 @@ public partial class gantong_api_vueSubmitLB : System.Web.UI.Page
     private BrainTrain.BLL.bt_gantong_group groupBll = new BrainTrain.BLL.bt_gantong_group();
     private BrainTrain.BLL.bt_gantong_course courseBll = new BrainTrain.BLL.bt_gantong_course();
     private BrainTrain.BLL.bt_gantong_user uBll = new BrainTrain.BLL.bt_gantong_user();
+    private BrainTrain.BLL.bt_gantong_curriculum cBll = new BrainTrain.BLL.bt_gantong_curriculum();
 
     protected string name = "";
     protected string sex = "";
@@ -24,7 +25,19 @@ public partial class gantong_api_vueSubmitLB : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            Response.Redirect("./vueUnLogin.aspx");
+        }
+
         string user = Page.User.Identity.Name;
+        BrainTrain.Model.bt_gantong_curriculum c_m = cBll.GetModel(user);
+        int ui_count = uBll.GetDataTable("name=\"" + user + "\" order by ui desc").Rows.Count;
+        if (c_m == null || c_m.times - ui_count <= 0) { 
+            // 量表创建次数已经使用完
+            Response.Write("{" + String.Format("\"msg\":\"你的量表创建次数已经用完，如需继续创建，请联系管理员。\",\"u_i\":{0}", -1) + "}");
+            return;
+        }
 
         if (Request.QueryString["name"] != null)
         {

@@ -25,6 +25,11 @@ public partial class gantong_api_vueSubmitScore : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            Response.Redirect("./vueUnLogin.aspx");
+        }
+
         if (User.Identity.IsAuthenticated)
         {
             if (checkValid())

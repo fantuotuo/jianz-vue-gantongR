@@ -39,7 +39,11 @@
 				/>
 			</div>
 			<div class='gt-btns'>
-				<el-button v-on:click='submitLiangbiao'>
+				<el-button 
+					type='primary'
+					size='small'
+					v-on:click='submitLiangbiao'
+				>
 					提交量表
 				</el-button>
 			</div>

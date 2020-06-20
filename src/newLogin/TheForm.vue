@@ -6,7 +6,12 @@
 			</div> -->
 			<el-form label-width="80px" size='small'>
 				<el-form-item label='姓名'>
-					<el-input v-model='name'></el-input>
+					<el-input 
+						type='text'
+						v-model='name'
+						maxlength='5'
+						v-bind:show-word-limit='true'
+					></el-input>
 				</el-form-item>
 				<el-form-item label='性别'>
 					<el-radio-group v-model='sex'>
@@ -29,10 +34,19 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label='备注'>
-					<el-input type='textarea' rows='3' v-model='remark'></el-input>
+					<el-input 
+						type='textarea' 
+						rows='3' 
+						v-model='remark'
+						maxlength='100'
+						v-bind:show-word-limit='true'
+					></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button @click='submit'>
+					<el-button 
+						v-on:click='submit'
+						type='primary'
+					>
 						提交
 					</el-button>
 				</el-form-item>

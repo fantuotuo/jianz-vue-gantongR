@@ -25,6 +25,9 @@ public partial class gantong_api_vueGetFangan : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!User.Identity.IsAuthenticated) {
+            Response.Redirect("./vueUnLogin.aspx");
+        }
         string user = Page.User.Identity.Name;
 
         try
