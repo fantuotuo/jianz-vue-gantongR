@@ -29,7 +29,7 @@ const store=new Vuex.Store({
 		desktop_users:[
 			// {i:0,u_i:0,name:"name",date:"2020-05-05"}
 		],
-		desktop_liangbiao_times:1,
+		desktop_liangbiao_times:-1,
 
 		login_name:"",
 		login_sex:"",

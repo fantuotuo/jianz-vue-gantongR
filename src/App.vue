@@ -52,58 +52,34 @@ export default {
 	created:function(){
 		console.log("app created");
 
-		this.axios.get("./api/vueGetUserList.aspx")
-			.then(response=>{
-				let ret=response.data;
-
-				if(ret.unLogin===true){
-					// 未登录
-					location.href='/gt/';
-				}else{
-					this.$store.commit("desktop_user_load",{
-						user:ret.user,
-						users:ret.users,
-						liangbiao_times:ret.times
-					});
-				}
-				this.loadingSet(false);
+		this.$http
+			.get("./api/vueGetUserList.aspx")
+			.then(ret=>{
+				this.$store.commit("desktop_user_load",{
+					user:ret.user,
+					users:ret.users,
+					liangbiao_times:ret.times
+				});
 			})
-			.catch(error=>{
-				alert("发送请求错误："+error);
-				this.loadingSet(false);
-			});
-		this.loadingSet(true);
+			.catch(()=>{});
 	},
 	methods:{
 		toLogin:function(){
 			location.href="/login.aspx?ReturnUrl=%2fgt%2f";
 		},
 		toLogout:function(){
-			this.axios.get("./api/vueLogout.aspx")
-				.then(response=>{
-					let ret=response.data;
-
-					if(ret.unLogin===true){
-						// 未登录
-						location.href='/gt/';
-					}else if(ret.code===1){
+			this.$http
+				.get("./api/vueLogout.aspx")
+				.then(ret=>{
+					if(ret.code===1){
+						// 重新登陆
 						location.href="/login.aspx?ReturnUrl=%2fgt%2f";
 					}else{
-						alert("发送请求错误："+ret.msg);
+						alert("退出登陆时发生错误："+ret.msg);
 					}
-					this.loadingSet(false);
 				})
-				.catch(error=>{
-					alert("发送请求错误："+error);
-					this.loadingSet(false);
-				});
-			this.loadingSet(true);
+				.catch(()=>{});
 		},
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
-		}
 	},
 	components: {
 
@@ -133,6 +109,9 @@ export default {
 .el-menu--horizontal .gt-submenu-right{
 	float:right;
 }
+.el-loading-spinner .path{
+	stroke: #32b16c;
+}
 /*#app {
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
@@ -149,7 +128,7 @@ html,body{
 	padding-bottom:80px;
 }
 .kt-app{
-	width:1280px;
+	width:1024px;
 	margin:0 auto;
 }
 .kt-footer{

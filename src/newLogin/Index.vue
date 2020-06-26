@@ -35,7 +35,6 @@ export default{
 	},
 	created:function(){
 		console.log("login created");
-		this.loadingSet(false);
 		this.$store.commit("login_init_set",{
 			name:"",
 			sex:"男",
@@ -47,11 +46,6 @@ export default{
 	methods:{
 		routeChange:function(){
 			console.log("change")
-		},
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
 		},
 		submitForm:function(){
 			this.step=1;
@@ -65,29 +59,18 @@ export default{
 			url+="&sex="+this.$store.state.login_sex;
 			url+="&age="+this.$store.state.login_age;
 			url+="&remark="+this.$store.state.login_remark;
-			this.axios
+			this.$http
 				.get(encodeURI(url))
-				.then(response=>{
-					let ret=response.data;
-
-					if(ret.unLogin===true){
-						// 未登录
-						location.href='/gt/';
-					}else if(ret.u_i>=0){
+				.then(ret=>{
+					if(ret.u_i>=0){
 						this.$router.push({
 							path:"fangan",query:{u_i:ret.u_i}
 						});
-						// window.location.href="../fangan?u_i="+ret.u_i;
 					}else{
 						alert(ret.msg+"");
-						this.loadingSet(false);
 					}
 				})
-				.catch(error=>{
-					alert("发送请求错误："+error);
-					this.loadingSet(false);
-				});
-			this.loadingSet(true);
+				.catch(()=>{});
 		}
 	},
 	components:{

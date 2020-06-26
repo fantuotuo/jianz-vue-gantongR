@@ -51,7 +51,10 @@ router.beforeEach((to,from,next)=>{
 			next();
 		}
 	}else if(to.name==="Login"){
-		if(store.state.desktop_liangbiao_times - store.state.desktop_users.length <= 0){
+		if(store.state.desktop_liangbiao_times===-1){
+			// 说明是直接打开页面，需要先回首页，进行一些数据初始化获取
+			next({path:"/"});
+		}else if(store.state.desktop_liangbiao_times - store.state.desktop_users.length <= 0){
 			alert("你的量表创建次数已经用完！");
 			next(from.fullPath);
 		}else{

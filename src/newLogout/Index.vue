@@ -14,36 +14,22 @@ export default{
 	created:function(){
 		console.log("logout_created");
 
-		this.axios.get("./api/vueLogout.aspx")
-			.then(response=>{
-				let ret=response.data;
-
-				if(ret.unLogin===true){
-					// 未登录
-					location.href='/gt/';
-				}else if(ret.code===1){
+		this.$http
+			.get("./api/vueLogout.aspx")
+			.then(ret=>{
+				if(ret.code===1){
 					// 保存路由，保证登陆后返回desktop
 					this.$router.push({"path":"desktop"});
 					window.location.reload();
 				}else{
-					alert("发送请求错误："+ret.msg);
+					alert("退出登陆时发生错误："+ret.msg);
 					this.$router.go(-1);
 				}
-				this.loadingSet(false);
 			})
-			.catch(error=>{
-				alert("发送请求错误："+error);
-				this.$router.go(-1);
-				this.loadingSet(false);
-			});
-		this.loadingSet(true);
+			.catch(()=>{});
 	},
 	methods:{
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
-		}
+
 	},
 	components:{
 

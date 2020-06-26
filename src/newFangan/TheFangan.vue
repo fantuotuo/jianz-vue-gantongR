@@ -93,27 +93,17 @@ export default{
 			let url="./api/vueSubmitScore.aspx?row="+row+"&score="+score;
 			url+="&u_i="+this.ui;
 
-			this.axios.get(url)
-				.then(response=>{
-					let ret=response.data;
+			this.$http
+				.get(url)
+				.then(ret=>{
 					if(ret && ret.code===1){
 						this.$store.commit("fangan_score_set",{
 							row:row,
 							score:ret.score
 						});
 					}
-					this.loadingSet(false);
 				})
-				.catch(error=>{
-					alert("发送请求错误："+error);
-					this.loadingSet(false);
-				});
-			this.loadingSet(true);
-		},
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
+				.catch(()=>{});
 		}
 	},
 

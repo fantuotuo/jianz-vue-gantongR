@@ -79,13 +79,6 @@ export default{
 		routeChange:function(){
 			console.log("fangan changed");
 			let ui=parseInt(this.$route.query.u_i);
-			// if(ui===undefined){
-			// 	// 返回桌面
-			// 	// this.$router.push({"path":"desktop",query:{}});
-			// 	this.$router.go(-1);
-			// 	alert("请选择一个用户登陆");
-			// 	return;
-			// }
 			// 重置相关数据值
 			this.$store.commit("fangan_init_set",{
 				ui:ui,
@@ -93,39 +86,29 @@ export default{
 			});
 
 			let url="./api/vueGetFangan.aspx?u_i="+this.ui;
-			this.axios
+			this.$http
 				.get(url)
-				.then(response=>{
-					let ret=response.data;
-
-					if(ret.unLogin===true){
-						// 未登录
-						location.href='/gt/';
-					}else{
-						this.$store.commit("fangan_fangan_set",{
-							name:ret.name,
-							age:ret.age,
-							score:ret.score,
-							fangan:ret.fangan,
-							dates:ret.dates,
+				.then(ret=>{
+					if(!ret.fangan || ret.fangan.length<=0){
+						alert("量表不存在！");
+						this.$router.push({
+							path:"/"
 						});
+						return;
 					}
-					this.loadingSet(false);
+					this.$store.commit("fangan_fangan_set",{
+						name:ret.name,
+						age:ret.age,
+						score:ret.score,
+						fangan:ret.fangan,
+						dates:ret.dates,
+					});
 				})
-				.catch(error=>{
-					alert("发送请求错误："+error);
-					this.loadingSet(false);
-				});
-			this.loadingSet(true);
+				.catch(()=>{});
 		},
 		toggleStep:function(index){
 			this.step=index;
 		},
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
-		}
 	},
 	components:{
 		TheBaogao,

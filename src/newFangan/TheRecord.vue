@@ -55,9 +55,10 @@ export default{
 	methods:{
 		clickDate:function(date){
 			let url="./api/vueGetRecord.aspx?date="+date+"&u_i="+this.ui;
-			this.axios.get(url)
-				.then(response=>{
-					let ret=response.data;
+
+			this.$http
+				.get(url)
+				.then(ret=>{
 					if(ret && ret.code===1){
 						let record=ret.record;
 						this.$store.commit("fangan_date_set",{
@@ -66,18 +67,8 @@ export default{
 							recordfirst:false
 						});
 					}
-					this.loadingSet(false);
 				})
-				.catch(error=>{
-					alert("发送请求错误："+error);
-					this.loadingSet(false);
-				});
-			this.loadingSet(true);
-		},
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
+				.catch(()=>{});
 		}
 	},
 

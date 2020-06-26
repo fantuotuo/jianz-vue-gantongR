@@ -73,34 +73,18 @@ export default{
 	created:function(){
 		console.log("desktop created");
 
-		this.axios.get("./api/vueGetUserList.aspx")
-			.then(response=>{
-				let ret=response.data;
-
-				if(ret.unLogin===true){
-					// 未登录
-					location.href='/gt/';
-				}else{
-					this.$store.commit("desktop_user_load",{
-						user:ret.user,
-						users:ret.users,
-						liangbiao_times:ret.times
-					});
-				}
-				this.loadingSet(false);
+		this.$http
+			.get("./api/vueGetUserList.aspx",{})
+			.then(ret=>{
+				this.$store.commit("desktop_user_load",{
+					user:ret.user,
+					users:ret.users,
+					liangbiao_times:ret.times
+				});
 			})
-			.catch(error=>{
-				alert("发送请求错误："+error);
-				this.loadingSet(false);
-			});
-		this.loadingSet(true);
+			.catch(()=>{});
 	},
 	methods:{
-		loadingSet:function(bool){
-			this.$store.commit("loading_set",{
-				loading:bool
-			});
-		},
 		toFangan:function(u_i){
 			this.$router.push({path:"/fangan",query:{u_i}});
 		},

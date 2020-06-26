@@ -1,9 +1,8 @@
 import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-
+import http from './http.js'
+Vue.prototype.$http=http;
 Vue.config.productionTip = false;
-Vue.use(VueAxios,axios);			// 安装axios
+// Vue.use(VueAxios,axios);			// 安装axios
 import store from './store.js';		// vuex
 import router from './router.js';	// 路由
 import './plugins/element.js';		// 引入element-ui
