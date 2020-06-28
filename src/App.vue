@@ -1,7 +1,7 @@
 <template>
 	<div id="app" v-loading.fullscreen='loading'>
 		<el-menu 
-			:defaultActive="this.$route.path" 
+			v-bind:defaultActive="this.$route.path" 
 			router 
 			class='el-menu-demo' 
 			mode='horizontal'
@@ -10,24 +10,32 @@
 			active-text-color='#f3f710'
 		>
 			<div class="el-menu--horizontal layout">
-				<el-menu-item index='/desktop'>
+				<el-menu-item index='/desktop' v-bind:disabled='!user_valid'>
 					切换量表
 				</el-menu-item>
-				<el-menu-item index='/login'>
+				<el-menu-item index='/login' v-bind:disabled='!user_valid'>
 					新增量表
 				</el-menu-item>
-				<el-menu-item index='/fangan'>
+				<el-menu-item index='/fangan' v-bind:disabled='!user_valid'>
 					训练方案
 				</el-menu-item>
-				<el-menu-item v-if='desktop_zhanghao===""' class='gt-submenu-right' index='zhanghao0' v-on:click='toLogin' >
+
+				<el-menu-item v-if='desktop_zhanghao===""' class='gt-submenu-right' index='/zhanghao0' v-on:click='toLogin' >
 					未登录
 				</el-menu-item>
-				<el-submenu v-else class='gt-submenu-right' index='zhanghao1'>
+				<el-submenu 
+					v-else 
+					class='gt-submenu-right' 
+					index='/zhanghao1'
+				>
 					<template slot='title'>
 						<i class='el-icon-user-solid'></i>
 						{{desktop_zhanghao}}
 					</template>
-					<el-menu-item v-on:click='toLogout'>退出此账号</el-menu-item>
+					<el-menu-item 
+						v-on:click='toLogout'
+						index='/zhanghao1_1'
+					>退出此账号</el-menu-item>
 				</el-submenu>
 			</div>
 		</el-menu>
@@ -44,6 +52,7 @@ export default {
 	name: 'app',
 	computed:{
 		...mapState({
+			user_valid:state=>state.user_valid,
 			loading:state=>state.loading,
 			desktop_zhanghao:state=>state.desktop_zhanghao
 		})

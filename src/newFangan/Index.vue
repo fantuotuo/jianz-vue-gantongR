@@ -104,7 +104,11 @@ export default{
 						dates:ret.dates,
 					});
 				})
-				.catch(()=>{});
+				.catch(()=>{
+					this.$router.push({
+						path:"/"
+					})
+				});
 		},
 		toggleStep:function(index){
 			this.step=index;

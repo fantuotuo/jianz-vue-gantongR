@@ -25,6 +25,8 @@ const store=new Vuex.Store({
 	// 	}
 	// },
 	state:{
+		user_valid:false,
+
 		desktop_zhanghao:"",
 		desktop_users:[
 			// {i:0,u_i:0,name:"name",date:"2020-05-05"}
@@ -68,6 +70,10 @@ const store=new Vuex.Store({
 		loading:false,
 	},
 	mutations:{
+		user_valid_set(state,payload){
+			state.user_valid=payload.user_valid;
+		},
+
 		desktop_user_load(state,payload){
 			state.desktop_zhanghao=payload.user;
 			state.desktop_users=payload.users;

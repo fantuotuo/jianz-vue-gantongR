@@ -35,7 +35,7 @@
 								v-bind:key='item_son.i'
 							>
 								<img 
-									v-bind:src='"/gantong/public/images/"+item_son.v+".png"' 
+									v-bind:src='"/gt/public/images/"+item_son.v+".png"' 
 									v-bind:alt='item_son.v' 
 									v-bind:title='item_son.v' />
 								<br />

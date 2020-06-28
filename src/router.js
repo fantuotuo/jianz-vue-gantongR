@@ -6,6 +6,7 @@ import store from './store.js';
 import Desktop from "./newDesktop/Index.vue";
 import Login from "./newLogin/Index.vue";
 import Fangan from "./newFangan/Index.vue";
+import Error from "./newError/Index.vue";
 // import Logout from "./newLogout/Index.vue";
 
 const routes=[
@@ -24,6 +25,11 @@ const routes=[
 		name:"Fangan",
 		component:Fangan,
 		meta:{title:"感统训练中心-训练"}
+	},{
+		path:"/error",
+		name:"Error",
+		component:Error,
+		meta:{title:"感统训练中心-错误页"}
 	},
 	// {
 	// 	path:"/logout",
@@ -40,29 +46,69 @@ const router=new VueRouter({
 	routes
 });
 router.beforeEach((to,from,next)=>{
-	if(to.meta.title){
-		document.title=to.meta.title;
-	}
-	if(to.name==="Fangan"){
-		if(isNaN(parseInt(to.query.u_i))){
-			alert("请选择一个量表登陆！");
-			next(from.fullPath);
-		}else{
-			next();
-		}
-	}else if(to.name==="Login"){
-		if(store.state.desktop_liangbiao_times===-1){
-			// 说明是直接打开页面，需要先回首页，进行一些数据初始化获取
-			next({path:"/"});
-		}else if(store.state.desktop_liangbiao_times - store.state.desktop_users.length <= 0){
-			alert("你的量表创建次数已经用完！");
-			next(from.fullPath);
-		}else{
-			next();
-		}
+	if(to.name==="Error"){
+		changeMeta(to.meta);
+		next();
 	}else{
-		next()
+		if(store.state.user_valid){
+			validUser();
+		}else{
+			Vue.prototype.$http
+				.get("./api/vueUserValid.aspx")
+				.then(ret=>{
+					if(ret.valid===1){
+						store.commit("user_valid_set",{user_valid:true});
+						validUser();
+					}else{
+						next({path:"/error"});
+					}
+				})
+				.catch(()=>{
+					next({path:"/error"});
+				})
+		}
 	}
-})
+
+	function validUser(){
+		if(to.name==="Fangan"){
+			validToFangan(to,from,next);
+		}else if(to.name==="Login"){
+			validToLogin(to,from,next);
+		}else{
+			// desktop
+			validToDesktop(to,from,next);
+		}
+	}
+});
+function validToDesktop(to,ftom,next){
+	changeMeta(to.meta);
+	next();
+}
+function validToLogin(to,from,next){
+	if(store.state.desktop_liangbiao_times===-1){
+		// 说明是直接打开页面，需要先回首页，进行一些数据初始化获取
+		next({path:"/"});
+	}else if(store.state.desktop_liangbiao_times - store.state.desktop_users.length <= 0){
+		alert("你的量表创建次数已经用完！");
+		next(from.fullPath);
+	}else{
+		changeMeta(to.meta);
+		next();
+	}
+}
+function validToFangan(to,from,next){
+	if(isNaN(parseInt(to.query.u_i))){
+		alert("请选择一个量表登陆！");
+		next(from.fullPath);
+	}else{
+		changeMeta(to.meta);
+		next();
+	}
+}
+function changeMeta(meta){
+	if(meta && meta.title){
+		document.title=meta.title
+	}
+}
 
 export default router;
