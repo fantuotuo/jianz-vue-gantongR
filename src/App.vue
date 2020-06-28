@@ -1,13 +1,16 @@
 <template>
 	<div id="app" v-loading.fullscreen='loading'>
+		<div class='kt-header'>
+			<div class='layout'>
+				<img src='./assets/logo.png' alt='健知教育' />
+				健知儿童感觉统合能力测评训练系统
+			</div>
+		</div>
 		<el-menu 
 			v-bind:defaultActive="this.$route.path" 
 			router 
 			class='el-menu-demo' 
 			mode='horizontal'
-			background-color='#32b16c'
-			text-color='#fff'
-			active-text-color='#f3f710'
 		>
 			<div class="el-menu--horizontal layout">
 				<el-menu-item index='/desktop' v-bind:disabled='!user_valid'>
@@ -48,6 +51,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./common.scss";
 import {mapState} from "vuex";
+
 export default {
 	name: 'app',
 	computed:{
@@ -102,7 +106,7 @@ export default {
 
 
 </style>
-<style>
+<style lang='scss'>
 .el-menu--horizontal{
 	outline:none!important;
 }
@@ -113,7 +117,7 @@ export default {
 	/*vertical-align: baseline;*/
 }
 .el-submenu__title i{
-	color:#fff;
+	// color:#fff;
 }
 .el-menu--horizontal .gt-submenu-right{
 	float:right;
@@ -139,6 +143,24 @@ html,body{
 .kt-app{
 	width:1024px;
 	margin:0 auto;
+}
+.kt-header{
+	height:90px;
+	background:#32b16c;
+	.layout{
+		position:relative;
+		color: #fff;
+		line-height: 90px;
+		text-align: center;
+		font-size: 2.85rem;
+		letter-spacing: .16em;
+
+		img{
+			position:absolute;
+			top:(90px - 57px)/2;
+			left:20px;
+		}
+	}
 }
 .kt-footer{
 	text-align:center;

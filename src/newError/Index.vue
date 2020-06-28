@@ -12,9 +12,12 @@
 </template>
 
 <script>
+// 无权限错误提示页
 export default{
 	name:"Error",
-	created:function(){console.log(this.$route.path)}
+	created:function(){
+
+	}
 }
 </script>
 
