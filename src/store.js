@@ -25,7 +25,10 @@ const store=new Vuex.Store({
 	// 	}
 	// },
 	state:{
-		user_valid:false,
+		user_valid:{
+			fetched:false,
+			valid:false,
+		},
 
 		desktop_zhanghao:"",
 		desktop_users:[
@@ -71,7 +74,8 @@ const store=new Vuex.Store({
 	},
 	mutations:{
 		user_valid_set(state,payload){
-			state.user_valid=payload.user_valid;
+			state.user_valid.fetched=payload.fetched;
+			state.user_valid.valid=payload.valid;
 		},
 
 		desktop_user_load(state,payload){

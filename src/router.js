@@ -47,28 +47,46 @@ const router=new VueRouter({
 });
 router.beforeEach((to,from,next)=>{
 	if(to.name==="Error"){
-		changeMeta(to.meta);
-		next();
-	}else{
-		if(store.state.user_valid){
-			validUser();
+		if(store.state.user_valid.valid){
+			next({path:"/desktop"});
+		}else if(store.state.user_valid.fetched){
+			changeMeta(to.meta);
+			next();
 		}else{
-			Vue.prototype.$http
-				.get("./api/vueUserValid.aspx")
-				.then(ret=>{
-					if(ret.valid===1){
-						store.commit("user_valid_set",{user_valid:true});
-						validUser();
-					}else{
-						next({path:"/error"});
-					}
-				})
-				.catch(()=>{
-					next({path:"/error"});
-				})
+			fetchValidUser(true);
+		}
+	}else{
+		if(store.state.user_valid.valid){
+			validUser();
+		}else if(store.state.user_valid.fetched){
+			// 已经获取，不需要重复获取了
+			next({path:"/error"});
+		}else{
+			fetchValidUser(false);
 		}
 	}
 
+	function fetchValidUser(toError){
+		Vue.prototype.$http
+			.get("./api/vueUserValid.aspx")
+			.then(ret=>{
+				if(ret.valid===1){
+					store.commit("user_valid_set",{fetched:true,valid:true});
+					if(toError){
+						next({path:"/desktop"});
+					}else{
+						validUser();
+					}
+				}else{
+					store.commit("user_valid_set",{fetched:true,valid:false});
+					next({path:"/error"});
+				}
+			})
+			.catch(()=>{
+				store.commit("user_valid_set",{fetched:true,valid:false});
+				next({path:"/error"});
+			})
+	}
 	function validUser(){
 		if(to.name==="Fangan"){
 			validToFangan(to,from,next);
@@ -80,7 +98,7 @@ router.beforeEach((to,from,next)=>{
 		}
 	}
 });
-function validToDesktop(to,ftom,next){
+function validToDesktop(to,from,next){
 	changeMeta(to.meta);
 	next();
 }

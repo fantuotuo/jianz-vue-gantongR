@@ -1,5 +1,10 @@
 <template>
-	<div id="app" v-loading.fullscreen='loading'>
+	<div id="app" 
+		v-loading.fullscreen='loading'
+		element-loading-spinner='el-icon-loading'
+		element-loading-text='加载中...'
+		element-loading-background='rgba(0,0,0,0.8)'
+	>
 		<div class='kt-header'>
 			<div class='layout'>
 				<img src='./assets/logo.png' alt='健知教育' />
@@ -56,7 +61,7 @@ export default {
 	name: 'app',
 	computed:{
 		...mapState({
-			user_valid:state=>state.user_valid,
+			user_valid:state=>state.user_valid.valid,
 			loading:state=>state.loading,
 			desktop_zhanghao:state=>state.desktop_zhanghao
 		})
@@ -169,5 +174,7 @@ html,body{
     line-height: 20px;
     height:80px;
     margin-top:-80px;
+
+    display:block!important;
 }
 </style>
