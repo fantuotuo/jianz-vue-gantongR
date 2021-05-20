@@ -3,44 +3,29 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-const store=new Vuex.Store({
-	// getters:{
-	// 	desktop_users_groups:state=>{
-	// 		let users=state.desktop_users;
-
-	// 		let groups=[];
-	// 		users.map(user=>{
-	// 			let month=user.date.replace(/\-\d*$/g,"");
-
-	// 			let find=false;
-	// 			groups.map(group=>{
-	// 				if(group.month===month){
-	// 					find=true;
-	// 					group.users.push(user);
-	// 					console.log(month);
-	// 				}
-	// 			})
-	// 		})
-
-	// 	}
-	// },
+const store = new Vuex.Store({
 	state:{
 		user_valid:{
 			fetched:false,
 			valid:false,
 		},
 
-		desktop_zhanghao:"",
-		desktop_users:[
-			// {i:0,u_i:0,name:"name",date:"2020-05-05"}
-		],
-		desktop_liangbiao_times:-1,
+		desktop_obj: {
+			user: "",
+			users: [
+				// {i:0,u_i:0,name:"name",date:"2020-05-05"}
+			],
+			liangbiao_times: -1,
+		},
+
 
 		login_name:"",
 		login_sex:"",
 		login_age:"",
 		login_remark:"",
 		login_str:"",
+
+
 
 		// u_i:window.initData.u_i,
 		fangan_ui:-1,
@@ -49,25 +34,14 @@ const store=new Vuex.Store({
 		fangan_videosrc:"",
 		fangan_videotitle:"title",
 
-		fangan_name:"",
-		fangan_age:3,
-		fangan_score:[
-			// {i:0,score:"20",comment:"1"}
-		],
 
-		fangan_fangan:[
-			// {i:0,name:"BB02 前滚翻",goal:"综合训练",tools:"tools",duration:"10",tip:"dasd<br>asddas",score:-1}
-		],
-
-		fangan_dates:[
-			// {i:0,date:"2020-03-03"},
-			// {i:1,date:"2020-03-05"},
-		],
-		fangan_date:"",
-		fangan_record:[
-			// {i:0,name:"C02 万象组合：过山洞",score:3,goal:"goal",time:""}
-		],
-		fangan_recordfirst:true,
+		fangan_obj: {
+			name: "",
+			age: 3,
+			score: [],
+			fangan: [],
+			dates:[]
+		},
 
 
 		loading:false,
@@ -78,10 +52,10 @@ const store=new Vuex.Store({
 			state.user_valid.valid=payload.valid;
 		},
 
-		desktop_user_load(state,payload){
-			state.desktop_zhanghao=payload.user;
-			state.desktop_users=payload.users;
-			state.desktop_liangbiao_times=payload.liangbiao_times;
+		desktop_obj_set(state,payload) {
+			state.desktop_obj.user = payload.user;
+			state.desktop_obj.users = payload.users;
+			state.desktop_obj.liangbiao_times = payload.liangbiao_times;
 		},
 
 		login_init_set(state,payload){
@@ -114,20 +88,25 @@ const store=new Vuex.Store({
 		fangan_videosrc_set(state,payload){
 			state.fangan_videosrc=payload.videosrc;
 		},
-		fangan_score_set(state,payload){
-			state.fangan_fangan[payload.row].score=payload.score;
+		fangan_score_set(state, payload) {
+			var i = payload.row,
+				item;
+			for (var k = 0; k < state.fangan_fangan.length; k++) {
+				if (state.fangan_fangan[k].i === i) {
+					item = state.fangan_fangan[k];
+					break;
+				}
+			}
+			if (item) {
+				item.score = payload.score;
+			}
 		},
-		fangan_date_set(state,payload){
-			state.fangan_date=payload.date;
-			state.fangan_record=payload.record;
-			state.fangan_recordfirst=payload.recordfirst;
-		},
-		fangan_fangan_set(state,payload){
-			state.fangan_name=payload.name;
-			state.fangan_age=payload.age;
-			state.fangan_score=payload.score;
-			state.fangan_fangan=payload.fangan;
-			state.fangan_dates=payload.dates;
+		fangan_obj_set(state, payload) {
+			state.fangan_obj.name = payload.name;
+			state.fangan_obj.age = payload.age;
+			state.fangan_obj.score = payload.score;
+			state.fangan_obj.fangan = payload.fangan;
+			state.fangan_obj.dates = payload.dates;
 		},
 
 		loading_set(state,payload){

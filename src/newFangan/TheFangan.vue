@@ -72,10 +72,10 @@ export default{
 	name:'TheFangan',
 	computed:{
 		...mapState({
-			name:state=>state.fangan_name,
-			age:state=>state.fangan_age,
-			days:state=>state.fangan_dates.length,
-			rows:state=>state.fangan_fangan,
+			name:state=>state.fangan_obj.name,
+			age:state=>state.fangan_obj.age,
+			days:state=>state.fangan_obj.dates.length,
+			rows:state=>state.fangan_obj.fangan,
 			ui:state=>state.fangan_ui
 		})
 	},

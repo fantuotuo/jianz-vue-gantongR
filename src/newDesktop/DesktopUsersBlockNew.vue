@@ -14,7 +14,7 @@ export default{
 	props:{
 		name:String,
 		date:String,
-		uI:Number
+		uI:String
 	}
 
 

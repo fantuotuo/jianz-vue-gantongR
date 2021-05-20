@@ -37,9 +37,9 @@ export default{
 	name:"TheBaogao",
 	computed:{
 		...mapState({
-			name:state=>state.fangan_name,
-			age:state=>state.fangan_age,
-			rows:state=>state.fangan_score,
+			name:state=>state.fangan_obj.name,
+			age:state=>state.fangan_obj.age,
+			rows:state=>state.fangan_obj.score,
 		})
 	},props:{a:String},
 	data:function(){

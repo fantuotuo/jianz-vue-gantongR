@@ -20,6 +20,19 @@ body{
 button.active.focus, button.active:focus,button.focus, button:active.focus,button:active:focus, button:focus {
 	outline:none;
 }
+.clear{
+	&:after{
+		content:"";
+		display:block;
+		clear:both;
+		height:0;
+		overflow:hidden;
+		visibility:hidden;
+	}
+}
+
+
+
 
 
 
@@ -79,4 +92,12 @@ $w-col-lg:$w-col * 5 - 4 * $w-col-sm;
 }
 .gt-col-db{
 	width:2*$w-col;
+}
+
+
+.el-loading-mask{
+    font-size:2rem;
+	.el-loading-spinner .el-loading-text{
+        font-size:1.0rem;
+    }
 }

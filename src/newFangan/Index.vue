@@ -25,20 +25,11 @@
 				</el-button>
 			</el-button-group>
 		</div>
-		<transition
-			name='transition-step-toggle'
-			mode='out-in'
-		>
-			<TheBaogao 
-				v-if='step==0' 
-			/>
-			<TheFangan 
-				v-if='step==1' 
-			/>
-			<TheRecord 
-				v-if='step==2' 
-			/>
-		</transition>
+		<div>
+			<TheBaogao v-show='step==0' />
+			<TheFangan v-show='step==1' />
+			<TheRecord v-show='step==2' :date='this.record_date' @clickDate='clickDateRecord' />
+		</div>
 			
 		<TheVideo />
 		<!-- <TheVideo :src='"http://jianz.com/zysx/static/videos/0/index.m3u8"' /> -->
@@ -64,6 +55,7 @@ export default{
 	data:function(){
 		return {
 			step:0,
+			record_date:""
 		}
 	},
 	watch:{
@@ -96,13 +88,17 @@ export default{
 						});
 						return;
 					}
-					this.$store.commit("fangan_fangan_set",{
+					this.$store.commit("fangan_obj_set",{
 						name:ret.name,
 						age:ret.age,
 						score:ret.score,
 						fangan:ret.fangan,
 						dates:ret.dates,
 					});
+
+					if(ret.dates.length>0){
+						this.record_date=ret.dates[0].date;
+					}
 				})
 				.catch(()=>{
 					this.$router.push({
@@ -113,6 +109,9 @@ export default{
 		toggleStep:function(index){
 			this.step=index;
 		},
+		clickDateRecord(date){
+			this.record_date=date;
+		}
 	},
 	components:{
 		TheBaogao,

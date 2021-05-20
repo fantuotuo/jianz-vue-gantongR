@@ -9,37 +9,30 @@ import Fangan from "./newFangan/Index.vue";
 import Error from "./newError/Index.vue";
 // import Logout from "./newLogout/Index.vue";
 
-const routes=[
+const routes = [
 	{
-		path:"/desktop",
-		name:"Desktop",
-		component:Desktop,
-		meta:{title:"感统训练中心-首页"}
-	},{
-		path:"/login",
-		name:"Login",
-		component:Login,
-		meta:{title:"感统训练中心-量表"}
-	},{
-		path:"/fangan",
-		name:"Fangan",
-		component:Fangan,
-		meta:{title:"感统训练中心-训练"}
-	},{
-		path:"/error",
-		name:"Error",
-		component:Error,
-		meta:{title:"感统训练中心-错误页"}
-	},
-	// {
-	// 	path:"/logout",
-	// 	name:"Logout",
-	// 	component:Logout,
-	// 	meta:{title:"感统训练中心-退出"}
-	// },
-	{
-		path:"*",
-		redirect:"/desktop"
+		path: "/desktop",
+		name: "Desktop",
+		component: Desktop,
+		meta: { title: "感统训练中心-首页" }
+	}, {
+		path: "/login",
+		name: "Login",
+		component: Login,
+		meta: { title: "感统训练中心-量表" }
+	}, {
+		path: "/fangan",
+		name: "Fangan",
+		component: Fangan,
+		meta: { title: "感统训练中心-训练" }
+	}, {
+		path: "/error",
+		name: "Error",
+		component: Error,
+		meta: { title: "感统训练中心-错误页" }
+	}, {
+		path: "*",
+		redirect: "/desktop"
 	}
 ];
 const router=new VueRouter({
@@ -102,11 +95,12 @@ function validToDesktop(to,from,next){
 	changeMeta(to.meta);
 	next();
 }
-function validToLogin(to,from,next){
-	if(store.state.desktop_liangbiao_times===-1){
+function validToLogin(to, from, next) {
+	var desktop_obj = store.state.desktop_obj;console.log(desktop_obj)
+	if(desktop_obj.liangbiao_times===-1){
 		// 说明是直接打开页面，需要先回首页，进行一些数据初始化获取
 		next({path:"/"});
-	}else if(store.state.desktop_liangbiao_times - store.state.desktop_users.length <= 0){
+	} else if (desktop_obj.liangbiao_times - desktop_obj.users.length <= 0) {
 		alert("你的量表创建次数已经用完！");
 		next(from.fullPath);
 	}else{

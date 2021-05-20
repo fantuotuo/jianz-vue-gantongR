@@ -30,14 +30,14 @@
 
 			<TheUsersBlockNew 
 				v-for='(item) in users' 
-				v-bind:key='item.i' 
-				v-bind:u-i='item.u_i' 
-				v-bind:name='item.name' 
-				v-bind:date='item.date' 
-				v-on:click='toFangan'
+				:key='item.i' 
+				:u-i='item.u_i' 
+				:name='item.name' 
+				:date='item.date' 
+				@click='toFangan'
 			/>
-			<div class='gt-userblock' v-bind:title='getTitlePlus'>
-				<el-button type='' v-bind:disabled='getLiangbiaoTimesRemain<=0' v-on:click='toLogin'>
+			<div class='gt-userblock' :title='getTitlePlus'>
+				<el-button type='' :disabled='getLiangbiaoTimesRemain<=0' @click='toLogin'>
 					<div class='gt-userblock__plus'>
 						<i class='el-icon-plus'></i>
 					</div>
@@ -56,9 +56,9 @@ export default{
 	name:"Desktop",
 	computed:{
 		...mapState({
-			zhanghao:state=>state.desktop_zhanghao,
-			users:state=>state.desktop_users,
-			liangbiao_times:state=>state.desktop_liangbiao_times
+			user:state=>state.desktop_obj.user,
+			users:state=>state.desktop_obj.users,
+			liangbiao_times:state=>state.desktop_obj.liangbiao_times,
 		}),
 		getLiangbiaoTimesRemain:function(){
 			return this.liangbiao_times-this.users.length;
@@ -77,7 +77,7 @@ export default{
 		this.$http
 			.get("./api/vueGetUserList.aspx",{})
 			.then(ret=>{
-				this.$store.commit("desktop_user_load",{
+				this.$store.commit("desktop_obj_set",{
 					user:ret.user,
 					users:ret.users,
 					liangbiao_times:ret.times

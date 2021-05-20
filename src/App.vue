@@ -18,17 +18,17 @@
 			mode='horizontal'
 		>
 			<div class="el-menu--horizontal layout">
-				<el-menu-item index='/desktop' v-bind:disabled='!user_valid'>
+				<el-menu-item index='/desktop' :disabled='!user_valid'>
 					切换量表
 				</el-menu-item>
-				<el-menu-item index='/login' v-bind:disabled='!user_valid'>
+				<el-menu-item index='/login' :disabled='!user_valid'>
 					新增量表
 				</el-menu-item>
-				<el-menu-item index='/fangan' v-bind:disabled='!user_valid'>
+				<el-menu-item index='/fangan' :disabled='!user_valid'>
 					训练方案
 				</el-menu-item>
 
-				<el-menu-item v-if='desktop_zhanghao===""' class='gt-submenu-right' index='/zhanghao0' v-on:click='toLogin' >
+				<el-menu-item v-if='user_name===""' class='gt-submenu-right' index='/zhanghao0' v-on:click='toLogin' >
 					未登录
 				</el-menu-item>
 				<el-submenu 
@@ -38,7 +38,7 @@
 				>
 					<template slot='title'>
 						<i class='el-icon-user-solid'></i>
-						{{desktop_zhanghao}}
+						{{user_name}}
 					</template>
 					<el-menu-item 
 						v-on:click='toLogout'
@@ -63,7 +63,7 @@ export default {
 		...mapState({
 			user_valid:state=>state.user_valid.valid,
 			loading:state=>state.loading,
-			desktop_zhanghao:state=>state.desktop_zhanghao
+			user_name:state=>state.desktop_obj.user
 		})
 	},
 	// 创建完成后获取用户初始数据
@@ -73,7 +73,7 @@ export default {
 		this.$http
 			.get("./api/vueGetUserList.aspx")
 			.then(ret=>{
-				this.$store.commit("desktop_user_load",{
+				this.$store.commit("desktop_obj_set",{
 					user:ret.user,
 					users:ret.users,
 					liangbiao_times:ret.times
