@@ -81,19 +81,24 @@ const store = new Vuex.Store({
 			state.login_str=payload.str;
 		},
 
+		
 		fangan_init_set(state,payload){
-			state.fangan_ui=payload.ui;
-			state.fangan_recordfirst=payload.recordfirst;
+			state.fangan_ui = payload.ui;
 		},
 		fangan_videosrc_set(state,payload){
-			state.fangan_videosrc=payload.videosrc;
+			state.fangan_videosrc = payload.videosrc;
 		},
+
+
+
+
 		fangan_score_set(state, payload) {
 			var i = payload.row,
 				item;
-			for (var k = 0; k < state.fangan_fangan.length; k++) {
-				if (state.fangan_fangan[k].i === i) {
-					item = state.fangan_fangan[k];
+			var fangan = state.fangan_obj.fangan;
+			for (var k = 0; k < fangan.length; k++) {
+				if (fangan[k].i === i) {
+					item = fangan[k];
 					break;
 				}
 			}
@@ -110,7 +115,7 @@ const store = new Vuex.Store({
 		},
 
 		loading_set(state,payload){
-			state.loading=payload.loading;
+			state.loading = payload.loading;
 		}
 	}
 });
