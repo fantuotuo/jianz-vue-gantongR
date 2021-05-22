@@ -19,14 +19,6 @@ const store = new Vuex.Store({
 		},
 
 
-		login_name:"",
-		login_sex:"",
-		login_age:"",
-		login_remark:"",
-		login_str:"",
-
-
-
 		// u_i:window.initData.u_i,
 		fangan_ui:-1,
 		// video_src:"http://jianz.com/upload/jianzhi_720.mp4",
@@ -56,29 +48,6 @@ const store = new Vuex.Store({
 			state.desktop_obj.user = payload.user;
 			state.desktop_obj.users = payload.users;
 			state.desktop_obj.liangbiao_times = payload.liangbiao_times;
-		},
-
-		login_init_set(state,payload){
-			state.login_name=payload.name;
-			state.login_sex=payload.sex;
-			state.login_age=payload.age;
-			state.login_remark=payload.remark;
-			state.login_str=payload.str;
-		},
-		login_name_set(state,payload){
-			state.login_name=payload.name;
-		},
-		login_sex_set(state,payload){
-			state.login_sex=payload.sex;
-		},
-		login_age_set(state,payload){
-			state.login_age=payload.age;
-		},
-		login_remark_set(state,payload){
-			state.login_remark=payload.remark;
-		},
-		login_str_set(state,payload){
-			state.login_str=payload.str;
 		},
 
 		

@@ -60,46 +60,12 @@
 <script>
 export default{
 	name:"TheForm",
-	computed:{
-		name:{
-			get(){
-				return this.$store.state.login_name;
-			},
-			set(value){
-				this.$store.commit("login_name_set",{
-					name:value
-				});
-			}
-		},
-		sex:{
-			get(){
-				return this.$store.state.login_sex;
-			},
-			set(value){
-				this.$store.commit("login_sex_set",{
-					sex:value
-				});
-			}
-		},
-		age:{
-			get(){
-				return this.$store.state.login_age;
-			},
-			set(value){
-				this.$store.commit("login_age_set",{
-					age:value
-				});
-			}
-		},
-		remark:{
-			get(){
-				return this.$store.state.login_remark;
-			},
-			set(value){
-				this.$store.commit("login_remark_set",{
-					remark:value
-				});
-			}
+	data:function(){
+		return {
+			name:"",
+			sex:"男",
+			age:"",
+			remark:"",
 		}
 	},
 	methods:{
@@ -108,7 +74,14 @@ export default{
 				alert("姓名不能为空");
 				return;
 			}
-			this.$emit('submit');
+
+
+			this.$emit('submit',{
+				name:this.name,
+				sex:this.sex,
+				age:this.age,
+				remark:this.remark
+			});
 		}
 	}
 }

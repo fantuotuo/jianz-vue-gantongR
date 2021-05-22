@@ -59,6 +59,7 @@ export default{
 	name:"TheLiangbiao",
 	data:function(){
 		return {
+			str:"",
 			manual:false,
 			tbs:[
 				{
@@ -200,14 +201,11 @@ export default{
 				return;
 			}
 
-			this.$store.commit("login_str_set",{
+			this.str=str;
+			this.$emit('submit',{
 				str:str
 			});
-			this.$emit('submit');
 		}
-	},
-	computed:{
-
 	},
 	components:{
 		TheLiangbiaoTable,

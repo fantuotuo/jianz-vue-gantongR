@@ -31,36 +31,46 @@ export default{
 		// 路由发生变化时，数据重新生成
 		return {
 			step:0,
+
+			name:"",
+			age:"",
+			sex:"",
+			remark:"",
+			str:"",
 		}
 	},
 	created:function(){
 		console.log("login created");
-		this.$store.commit("login_init_set",{
-			name:"",
-			sex:"男",
-			age:"3",
-			remark:"",
-			str:"",
-		});
 	},
 	methods:{
 		routeChange:function(){
 			console.log("change")
 		},
-		submitForm:function(){
+		// 提交个人信息
+		submitForm:function(obj){
+			this.name=obj.name;
+			this.sex=obj.sex;
+			this.age=obj.age;
+			this.remark=obj.remark;
+
 			this.step=1;
 		},
-		submitLiangbiao:function(){
+		// 提交量表
+		submitLiangbiao:function(obj){
+			this.str=obj.str;
+			
 			this.submit();
 		},
 		submit:function(){
-			let url="./api/vueSubmitLB.aspx?score="+this.$store.state.login_str;
-			url+="&name="+this.$store.state.login_name;
-			url+="&sex="+this.$store.state.login_sex;
-			url+="&age="+this.$store.state.login_age;
-			url+="&remark="+this.$store.state.login_remark;
+			let url="./api/vueSubmitLB.aspx";
 			this.$http
-				.get(encodeURI(url))
+				.get(encodeURI(url),{
+					score:this.str,
+					name:this.name,
+					sex:this.sex,
+					age:this.age,
+					remark:this.remark
+				})
 				.then(ret=>{
 					if(ret.u_i>=0){
 						this.$router.push({
