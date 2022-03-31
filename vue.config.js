@@ -13,6 +13,11 @@ module.exports={
             // pathRewrite: {
             //   '^/api': '/api'
             // }
+          },
+          "/m": {
+            target: 'http://localhost:80',
+            changeOrigin: true,
+            secure:false
           }
         }
     }

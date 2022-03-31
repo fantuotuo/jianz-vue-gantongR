@@ -6,7 +6,7 @@
 			finish-status='success'
 			simple
 		>
-			<el-step title='个人信息'></el-step>
+			<el-step title='录入个人信息'></el-step>
 			<el-step title='填写量表'></el-step>
 		</el-steps>
 		
@@ -15,7 +15,7 @@
 			mode='out-in'
 		>
 			<TheForm v-if='step==0' v-on:submit='submitForm' />
-			<TheLiangbiao v-else v-on:submit='submitLiangbiao' />
+			<TheLiangbiao v-else :age='parseInt(age)' v-on:submit='submitLiangbiao' />
 		</transition>
 	</div>
 </template>

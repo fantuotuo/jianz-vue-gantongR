@@ -5,27 +5,30 @@
 		element-loading-text='加载中...'
 		element-loading-background='rgba(0,0,0,0.8)'
 	>
-		<div class='kt-header'>
+		<div class='kt-header print-hide'>
 			<div class='layout'>
 				<img src='./assets/logo.png' alt='健知教育' />
 				健知儿童感觉统合能力测评训练系统
 			</div>
 		</div>
 		<el-menu 
-			v-bind:defaultActive="this.$route.path" 
+			:defaultActive="'-1'" 
 			router 
-			class='el-menu-demo' 
+			class='el-menu-demo print-hide' 
 			mode='horizontal'
 		>
 			<div class="el-menu--horizontal layout">
-				<el-menu-item index='/desktop' :disabled='!user_valid'>
-					切换量表
+				<el-menu-item :class='{"is-active2":"/login"===defaultActive}' index='/login' :disabled='!user_valid'>
+					新增学员
 				</el-menu-item>
-				<el-menu-item index='/login' :disabled='!user_valid'>
-					新增量表
+				<el-menu-item :class='{"is-active2":"/desktop"===defaultActive}' index='/desktop' :disabled='!user_valid'>
+					学员管理
 				</el-menu-item>
-				<el-menu-item index='/fangan' :disabled='!user_valid'>
+				<!-- <el-menu-item :class='{"is-active2":"/fangan"===defaultActive}' index='/desktop?openFangan=1' :disabled='!user_valid'>
 					训练方案
+				</el-menu-item> -->
+				<el-menu-item :class='{"is-active2":"/gailan"===defaultActive}' index='/gailan' :disabled='!user_valid'>
+					训练概览
 				</el-menu-item>
 
 				<el-menu-item v-if='user_name===""' class='gt-submenu-right' index='/zhanghao0' v-on:click='toLogin' >
@@ -47,7 +50,7 @@
 				</el-submenu>
 			</div>
 		</el-menu>
-	
+
 		<router-view></router-view>
 	</div>
 </template>
@@ -64,7 +67,13 @@ export default {
 			user_valid:state=>state.user_valid.valid,
 			loading:state=>state.loading,
 			user_name:state=>state.desktop_obj.user
-		})
+		}),
+		defaultActive(){
+			if(this.$route.path==="/desktop" && this.$route.query.openFangan==="1"){
+				return "/fangan";
+			}
+			return this.$route.path;
+		}
 	},
 	// 创建完成后获取用户初始数据
 	created:function(){
@@ -112,6 +121,13 @@ export default {
 
 </style>
 <style lang='scss'>
+:root{
+	// 不能直接使用上面的变量
+	--el-color-primary:#32b16c;
+	--el-color-primary-darken:#248f54;
+	--el-color-primary-transparent:#32b16c40;
+}
+
 .el-menu--horizontal{
 	outline:none!important;
 }
@@ -174,7 +190,18 @@ html,body{
     line-height: 20px;
     height:80px;
     margin-top:-80px;
+	visibility: visible!important;
+}
 
-    display:block!important;
+
+body .el-menu--horizontal > .el-menu-item{
+	&.is-active{
+		border-bottom: 2px solid transparent;
+		color: #909399;
+	}
+	&.is-active2{
+		border-bottom: 2px solid #32b16c!important;
+		color: #303133;
+	}
 }
 </style>

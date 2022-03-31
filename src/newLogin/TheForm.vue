@@ -64,7 +64,7 @@ export default{
 		return {
 			name:"",
 			sex:"男",
-			age:"",
+			age:'3',
 			remark:"",
 		}
 	},

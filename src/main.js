@@ -9,6 +9,12 @@ import './plugins/element.js';		// 引入element-ui
 import MyComponents from './components/MyComponents.js';
 Vue.use(MyComponents);				// 引入自定义组件
 
+// videojs相关处理
+import Video from 'video.js';
+import 'video.js/dist/video-js.css';
+Vue.prototype.$video = Video;
+
+
 import App from './App.vue'
 
 new Vue({

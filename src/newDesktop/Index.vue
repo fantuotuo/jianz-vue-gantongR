@@ -3,8 +3,8 @@
 		<div class='layout'>
 			<el-alert
 				type='info'
-				effect='dark'
-				v-bind:closable='false'
+				effect='light'
+				:closable='false'
 				center
 			>
 				<template slot='title'>
@@ -34,7 +34,7 @@
 				:u-i='item.u_i' 
 				:name='item.name' 
 				:date='item.date' 
-				@click='toFangan'
+				:sex='item.sex'
 			/>
 			<div class='gt-userblock' :title='getTitlePlus'>
 				<el-button type='' :disabled='getLiangbiaoTimesRemain<=0' @click='toLogin'>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+// 系统首页，可以切换使用不同的量表进行训练、查看成绩等
 import {mapState} from "vuex";
 import TheUsersBlockNew from "./DesktopUsersBlockNew.vue";
 
@@ -60,15 +61,14 @@ export default{
 			users:state=>state.desktop_obj.users,
 			liangbiao_times:state=>state.desktop_obj.liangbiao_times,
 		}),
+		// 剩余量表数量
 		getLiangbiaoTimesRemain:function(){
 			return this.liangbiao_times-this.users.length;
 		},
+		// 添加量表按钮的标题
 		getTitlePlus:function(){
-			if(this.getLiangbiaoTimesRemain>0){
-				return "新增一个量表";
-			}else{
-				return "你的量表创建次数已经用完，如需继续创建，请联系管理员。"
-			}
+			var enabled=this.getLiangbiaoTimesRemain>0;
+			return enabled?"新增一个量表":"你的量表创建次数已经用完，如需继续创建，请联系管理员。";
 		}
 	},
 	created:function(){
@@ -86,9 +86,6 @@ export default{
 			.catch(()=>{});
 	},
 	methods:{
-		toFangan:function(u_i){
-			this.$router.push({path:"/fangan",query:{u_i}});
-		},
 		toLogin:function(){
 			this.$router.push({path:"/login"});
 		}

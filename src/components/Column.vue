@@ -56,6 +56,8 @@ export default{
 				return "gt-col-db";
 			}else if(this.size==="large"){
 				return "gt-col-lg";
+			}else if(this.size.match(/[\d]/)){
+				return "gt-col-"+this.size;
 			}else{
 				return "";
 			}
@@ -66,19 +68,36 @@ export default{
 </script>
 
 <style module lang='scss'>
-.comment-a{
-	background-image:url("../assets/comment-bg-a.png");
+div.comment-a{
+	background-image:url("../assets/bg_comment-0.png");
+	border-bottom: 1px darken(#cdcdcd,20%) solid;
 }
-.comment-b{
-	background-image:url("../assets/comment-bg-b.png");
+div.comment-b{
+	background-image:url("../assets/bg_comment-1.png");
+	border-bottom: 1px darken(#cdcdcd,20%) solid;
 }
-.comment-c{
-	background-image:url("../assets/comment-bg-c.png");
+div.comment-c{
+	background-image:url("../assets/bg_comment-2.png");
+	border-bottom: 1px darken(#cdcdcd,20%) solid;
 }
-.comment-d{
-	background-image:url("../assets/comment-bg-d.png");
+div.comment-d{
+	background-image:url("../assets/bg_comment-3.png");
+	border-bottom: 1px darken(#cdcdcd,20%) solid;
 }
 .tip{
 	font-size:0.8rem;
+	>*{
+		margin:0 10px;
+	}
 }
+</style>
+<style lang="scss">
+// .gt-col{
+// 	&.comment-a,
+// 	&.comment-b,
+// 	&.comment-c,
+// 	&.comment-d{
+// 		border-bottom: 1px darken(#cdcdcd,20%) solid;
+// 	}
+// }
 </style>

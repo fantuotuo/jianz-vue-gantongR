@@ -5,7 +5,9 @@ const loadingSet=function(bool){
 	store.commit("loading_set",{loading:bool});
 }
 const http={
-	get:function(url,data){
+	get: function (url, data) {
+		data.tstamp = new Date().getTime();		// 防止get请求缓存
+
 		return new Promise((resolve,reject)=>{
 			loadingSet(true);
 			axios.get(url,{params:data})

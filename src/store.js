@@ -32,7 +32,9 @@ const store = new Vuex.Store({
 			age: 3,
 			score: [],
 			fangan: [],
-			dates:[]
+			dates: [],
+			date: "",
+			arrayAll: [],
 		},
 
 
@@ -81,6 +83,8 @@ const store = new Vuex.Store({
 			state.fangan_obj.score = payload.score;
 			state.fangan_obj.fangan = payload.fangan;
 			state.fangan_obj.dates = payload.dates;
+			state.fangan_obj.arrayAll = payload.arrayAll;
+			state.fangan_obj.date = payload.date;
 		},
 
 		loading_set(state,payload){

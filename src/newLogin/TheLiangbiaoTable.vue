@@ -57,7 +57,7 @@
 		<!-- body -->
 		<div 
 			class='gt-table__body'
-			:style='{height:heightBody+"px"}'>
+			:class='{"closed":closed}'>
 		<div 
 			class='gt-table__row'
 			v-for='(item,index) in rows'
@@ -97,14 +97,14 @@ export default{
 		scoreAll:Number,	// 这个只在初始创建的时候用到，使用data属性inputValue单向传值保持和父组件值一致
 		rows:Array,
 		i:Number,
+
+		age:Number,
 	},
 	created:function(){
 		this.inputValue=this.scoreAll;
 	},
 	computed:{
-		heightBody:function(){
-			return this.closed?0:40*this.rows.length;
-		}
+		
 	},
 	methods:{
 		inputChange:function(){
@@ -170,7 +170,12 @@ $c-border:#cdcdcd;
 }
 .gt-table__body{
 	overflow: hidden;
-	transition: all .3s ease;
+	transition: max-height .3s ease-out;
+	// max-height应该尽量设置成一个比较大的值
+	max-height:2000px;
+	&.closed{
+		max-height:0;
+	}
 }
 .gt-table__row .gt-table__row__col1__score{
 	width:220px;

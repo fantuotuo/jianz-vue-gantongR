@@ -36,6 +36,8 @@
 					v-bind:rows='item.rows'
 					v-bind:manual='manual'
 					v-on:scoreAllChange='scoreAllChange'
+
+					:age='age'
 				/>
 			</div>
 			<div class='gt-btns'>
@@ -57,6 +59,9 @@ import TheLiangbiaoTable from './TheLiangbiaoTable.vue';
 
 export default{
 	name:"TheLiangbiao",
+	props:{
+		age:Number
+	},
 	data:function(){
 		return {
 			str:"",
@@ -69,7 +74,7 @@ export default{
 						{ques:"2、儿童看来正常、健康，有正常智慧，但学习阅读或做算术特难。",name:"",score:0},
 						{ques:"3、在眼看得见情况下，屡碰撞桌椅、杯子或旁人，方向和距离感差。",name:"",score:0},
 						{ques:"4、手舞足蹈，吃饭、写字、打鼓时双手或双脚配合不良，常忘另一边。",name:"",score:0},
-						{ques:"5、表面上左撇子，左右手都用，或尚未固定偏好使用哪一只手。  ",name:"",score:0},
+						{ques:"5、表面上左或右撇子，左右手都用，或尚未固定偏好使用哪一只手。  ",name:"",score:0},
 						{ques:"6、大动作笨拙，容易跌倒，并不会用手支撑保护自己；拉他时显得笨重。",name:"",score:0},
 						{ques:"7、语音不清晰，组合句子或编组故事困难。",name:"",score:0},
 						{ques:"8、看书眼睛会累，却可以长时间看电视。 ",name:"",score:0},
@@ -88,7 +93,7 @@ export default{
 						{ques:"16、严重怕黑，到暗处要有人陪，晚上拒绝出去，不喜欢到空屋子去。",name:"",score:0},
 						{ques:"17、换床睡不着，换枕头或被子睡不好，出外总是对睡眠空间担心。",name:"",score:0},
 						{ques:"18、别人为他用棉棒清洁鼻子和耳朵时，他往往觉得不舒服。",name:"",score:0},
-						{ques:"19、喜欢往亲人的身上挨靠或搂抱，象被宠坏或被溺爱的孩子。",name:"",score:0},
+						{ques:"19、喜欢往亲人的身上挨靠或搂抱，像被宠坏或被溺爱的孩子。",name:"",score:0},
 						{ques:"20、睡觉时总爱触摸被角，抱棉被，衣物或玩具，否则会出现不安或睡不好。",name:"",score:0},
 					],
 					head_close:false,
@@ -104,7 +109,7 @@ export default{
 						{ques:"27、游戏中或玩玩具时，担心别人从后面逼近，为此而引起苦恼。",name:"",score:0},
 						{ques:"28、到处碰、触摸不停，但又避免触碰毛毯和编织玩具的表面。",name:"",score:0},
 						{ques:"29、常常喜欢穿宽松的长袖衣衫，不冷也常喜欢穿毛线衫或夹克。",name:"",score:0},
-						{ques:"30、爱谈天或做无接触的交往，但很不愿意跟朋友搭肩或做肌肤接触。",name:"",score:0},
+						{ques:"30、爱聊天或做无接触的交往，但很不愿意跟朋友搭肩或做肌肤接触。",name:"",score:0},
 						{ques:"31、对某些布料很敏感，不喜欢那类布料所做的衣服。",name:"",score:0},
 						{ques:"32、对自己的事物很敏感，很容易动情，计划或结果改变时不能容忍。",name:"",score:0},
 						{ques:"33、对无所谓的瘀伤，小肿块，小刀伤等，总觉得很痛而诉怨不止。",name:"",score:0},
@@ -155,13 +160,13 @@ export default{
 				},{
 					head:{name:"7",title:"七、情绪管理与自我调节",score:0},
 					rows:[
-						{ques:"61、情绪起伏不定，瞬间变好很大",name:"",score:0},
-						{ques:"62、因为小事而发脾气",name:"",score:0},
-						{ques:"63、每次发脾气后，持续时间较长，难以平复情绪",name:"",score:0},
-						{ques:"64、容易紧张，因小事而紧张",name:"",score:0},
-						{ques:"65、自控能力差，容易冲动",name:"",score:0},
-						{ques:"66、平时兴奋度低，无精打采，但遇到喜欢的人、活动或者事物时，却有强烈的反应",name:"",score:0},
-						{ques:"67、在家中表现自如，但在不熟悉环境或陌生人面前却表现得十分紧张或者退缩",name:"",score:0},
+						{ques:"61、情绪起伏不定，瞬间变化很大。",name:"",score:0},
+						{ques:"62、因为小事而发脾气。",name:"",score:0},
+						{ques:"63、每次发脾气后，持续时间较长，难以平复情绪。",name:"",score:0},
+						{ques:"64、容易紧张，因小事而紧张。",name:"",score:0},
+						{ques:"65、自控能力差，容易冲动。",name:"",score:0},
+						{ques:"66、平时兴奋度低，无精打采，但遇到喜欢的人、活动或者事物时，却有强烈的反应。",name:"",score:0},
+						{ques:"67、在家中表现自如，但在不熟悉环境或陌生人面前却表现得十分紧张或者退缩。",name:"",score:0},
 						{ques:"68、只顾满足自己的愿望，不理会环境要求，常常忘记原本要做的事情。",name:"",score:0},
 						{ques:"69、玩游戏或看电视时，在没有预告的情况下，需要转移下一个活动时，会发脾气或者哭闹。",name:"",score:0},
 						{ques:"70、做作业或活动时被打扰后难以重新投入之前进行的活动。",name:"",score:0},

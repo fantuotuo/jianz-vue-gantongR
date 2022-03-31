@@ -7,6 +7,7 @@ import Desktop from "./newDesktop/Index.vue";
 import Login from "./newLogin/Index.vue";
 import Fangan from "./newFangan/Index.vue";
 import Error from "./newError/Index.vue";
+import GaiLan from "./GaiLan/Index.vue";
 // import Logout from "./newLogout/Index.vue";
 
 const routes = [
@@ -25,7 +26,14 @@ const routes = [
 		name: "Fangan",
 		component: Fangan,
 		meta: { title: "感统训练中心-训练" }
-	}, {
+	},{
+		path: "/gailan",
+		name: "GaiLan",
+		component: GaiLan,
+		meta: { title: "感统训练中心-概览" }
+	},
+	
+	{
 		path: "/error",
 		name: "Error",
 		component: Error,

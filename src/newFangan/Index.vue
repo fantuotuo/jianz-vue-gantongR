@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<div class='layout print-hide' style='text-align:right;padding-right:20px;'>
+			<el-button type='primary' size='small' @click='onClickPrint'>打印</el-button>
+		</div>
 		<div class='layout center'>
 			<el-button-group>
 				<el-button 
@@ -26,12 +29,12 @@
 			</el-button-group>
 		</div>
 		<div>
-			<TheBaogao v-show='step==0' />
-			<TheFangan v-show='step==1' />
-			<TheRecord v-show='step==2' :date='this.record_date' @clickDate='clickDateRecord' />
+			<TheBaogao v-if='step==0' />
+			<TheFangan v-if='step==1' />
+			<TheRecord v-if='step==2' :date='this.record_date' @clickDate='clickDateRecord' />
 		</div>
 			
-		<TheVideo />
+		<!-- <TheVideo /> -->
 		<!-- <TheVideo :src='"http://jianz.com/zysx/static/videos/0/index.m3u8"' /> -->
 		<!-- <TheVideo :src='"../videos/jianzhi_720.mp4"' /> -->
 		<!-- <TheLoading :show='loading' /> -->
@@ -43,7 +46,7 @@ import {mapState} from "vuex";
 import TheBaogao from "./TheBaogao.vue";
 import TheFangan from "./TheFangan.vue";
 import TheRecord from "./TheRecord.vue";
-import TheVideo from "./TheVideo.vue";
+// import TheVideo from "./TheVideo.vue";
 
 export default{
 	name:"Fangan",
@@ -69,6 +72,7 @@ export default{
 	},
 	methods:{
 		routeChange:function(){
+			this.checkQuery();
 			console.log("fangan changed");
 			let ui=parseInt(this.$route.query.u_i);
 			// 重置相关数据值
@@ -88,16 +92,25 @@ export default{
 						});
 						return;
 					}
+					ret.fangan.forEach(element => {
+						element.tip = element.tip.replace(/([\d]+、)/g,"<br>$1");
+						element.tip = element.tip.replace(/(；)([\d]+)/g,"$1<br>$2");
+						element.tip = element.tip.replace(/[<br>]+/g,"\n");
+						element.tips = element.tip.split("\n").filter(s=>s);
+					});
+					ret.dates = ret.dates.reverse();
 					this.$store.commit("fangan_obj_set",{
 						name:ret.name,
 						age:ret.age,
 						score:ret.score,
 						fangan:ret.fangan,
 						dates:ret.dates,
+						arrayAll:ret.arrayAll,
+						date:ret.date,
 					});
 
 					if(ret.dates.length>0){
-						this.record_date=ret.dates[0].date;
+						this.record_date=ret.dates[ret.dates.length-1].date;
 					}
 				})
 				.catch(()=>{
@@ -106,18 +119,27 @@ export default{
 					})
 				});
 		},
-		toggleStep:function(index){
+		toggleStep(index){
 			this.step=index;
 		},
 		clickDateRecord(date){
 			this.record_date=date;
+		},
+		checkQuery(){
+			var query = this.$route.query;
+			if(query.openFangan==="1"){
+				this.toggleStep(1);
+			}
+		},
+		onClickPrint(){
+			window.print();
 		}
 	},
 	components:{
 		TheBaogao,
 		TheFangan,
 		TheRecord,
-		TheVideo,
+		// TheVideo,
 	}
 }
 
