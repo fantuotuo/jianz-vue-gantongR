@@ -94,12 +94,14 @@ export default{
 	}
 	.gt-userblock__name{
 		font-size:1.2rem;
+		margin-left:5px;
+		margin-right:5px;
 	}
 	.gt-userblock__date{
 		font-size:0.9rem;
+		color: #adb2bb;
 	}
 	.el-icon-user{
-		margin-right:5px;
 		color:#45a9fc;
 		font-weight: 600;
 		&.female{

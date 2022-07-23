@@ -1,8 +1,35 @@
 <template>
 	<div>
-		<div class='layout print-hide' style='text-align:right;padding-right:20px;'>
+		<!-- <div class='layout print-hide' style='text-align:right;padding-right:20px;'>
 			<el-button type='primary' size='small' @click='onClickPrint'>打印</el-button>
+		</div> -->
+
+		<div class='layout' style='margin-bottom:20px;'>
+			<el-descriptions title='学员信息' :column='4' size='small' border>
+				<template slot='extra'>
+					<el-button class='print-hide' type='primary' size='small' @click='onClickPrint'>打印</el-button>
+				</template>
+				<el-descriptions-item>
+					<template slot='label'>姓名</template>
+					{{fangan_obj.name}}
+				</el-descriptions-item>
+				<el-descriptions-item>
+					<template slot='label'>年龄</template>
+					{{fangan_obj.age}}岁
+				</el-descriptions-item>
+				<el-descriptions-item>
+					<template slot='label'>已训练天数</template>
+					{{fangan_obj.dates.length}}
+				</el-descriptions-item>
+				<el-descriptions-item>
+					<template slot='label'>量表生成日期</template>
+					{{fangan_obj.date}}
+				</el-descriptions-item>
+			</el-descriptions>
 		</div>
+		
+		
+
 		<div class='layout center'>
 			<el-button-group>
 				<el-button 
@@ -28,16 +55,12 @@
 				</el-button>
 			</el-button-group>
 		</div>
+		<!-- <i class="bi-alarm"></i> -->
 		<div>
 			<TheBaogao v-if='step==0' />
 			<TheFangan v-if='step==1' />
-			<TheRecord v-if='step==2' :date='this.record_date' @clickDate='clickDateRecord' />
+			<TheRecord v-if='step==2' />
 		</div>
-			
-		<!-- <TheVideo /> -->
-		<!-- <TheVideo :src='"http://jianz.com/zysx/static/videos/0/index.m3u8"' /> -->
-		<!-- <TheVideo :src='"../videos/jianzhi_720.mp4"' /> -->
-		<!-- <TheLoading :show='loading' /> -->
 	</div>
 </template>
 
@@ -46,20 +69,19 @@ import {mapState} from "vuex";
 import TheBaogao from "./TheBaogao.vue";
 import TheFangan from "./TheFangan.vue";
 import TheRecord from "./TheRecord.vue";
-// import TheVideo from "./TheVideo.vue";
+import { TipsFilter } from "../plugins/utils.js";
 
 export default{
 	name:"Fangan",
-	computed:{
-		...mapState({
-			ui:state=>state.fangan_ui,
-		}),
-	},
 	data:function(){
 		return {
 			step:0,
-			record_date:""
 		}
+	},
+	computed:{
+		...mapState({
+			fangan_obj:state=>state.fangan_obj
+		})
 	},
 	watch:{
 		"$route":"routeChange"
@@ -72,16 +94,20 @@ export default{
 	},
 	methods:{
 		routeChange:function(){
-			this.checkQuery();
-			console.log("fangan changed");
-			let ui=parseInt(this.$route.query.u_i);
+			this.checkQuery();		// 检测query，是否需要自动切换到方案
+			let ui = parseInt(this.$route.query.u_i);
+			if(isNaN(ui)) ui = 0;
+			if(this.fangan_obj.ui===ui){
+				// ui未改变，不需要重新获取数据
+				return;
+			}
+
 			// 重置相关数据值
 			this.$store.commit("fangan_init_set",{
 				ui:ui,
-				recordfirst:true,
 			});
 
-			let url="./api/vueGetFangan.aspx?u_i="+this.ui;
+			let url="./api/vueGetFangan.aspx?u_i="+ui;
 			this.$http
 				.get(url)
 				.then(ret=>{
@@ -93,12 +119,9 @@ export default{
 						return;
 					}
 					ret.fangan.forEach(element => {
-						element.tip = element.tip.replace(/([\d]+、)/g,"<br>$1");
-						element.tip = element.tip.replace(/(；)([\d]+)/g,"$1<br>$2");
-						element.tip = element.tip.replace(/[<br>]+/g,"\n");
+						element.tip = TipsFilter(element.tip);
 						element.tips = element.tip.split("\n").filter(s=>s);
 					});
-					ret.dates = ret.dates.reverse();
 					this.$store.commit("fangan_obj_set",{
 						name:ret.name,
 						age:ret.age,
@@ -108,10 +131,6 @@ export default{
 						arrayAll:ret.arrayAll,
 						date:ret.date,
 					});
-
-					if(ret.dates.length>0){
-						this.record_date=ret.dates[ret.dates.length-1].date;
-					}
 				})
 				.catch(()=>{
 					this.$router.push({
@@ -121,9 +140,6 @@ export default{
 		},
 		toggleStep(index){
 			this.step=index;
-		},
-		clickDateRecord(date){
-			this.record_date=date;
 		},
 		checkQuery(){
 			var query = this.$route.query;
@@ -139,7 +155,6 @@ export default{
 		TheBaogao,
 		TheFangan,
 		TheRecord,
-		// TheVideo,
 	}
 }
 

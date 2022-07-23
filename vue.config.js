@@ -18,6 +18,11 @@ module.exports={
             target: 'http://localhost:80',
             changeOrigin: true,
             secure:false
+          },
+          "/images": {
+            target: 'http://localhost:80',
+            changeOrigin: true,
+            secure:false
           }
         }
     }

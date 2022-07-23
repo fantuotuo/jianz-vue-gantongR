@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class='layout'>
-			<div>
+			<!-- <div>
 				<div class='gt-row head bg-secondary text-white'>
 					<Column text='姓名' size='2' />
 					<Column :text='name' size='2' />
@@ -10,7 +10,7 @@
 					<Column text='生成日期' size='2' />
 					<Column :text='date' size='2' />
 				</div>
-			</div>
+			</div> -->
 			<div>
 				<div class='gt-row head bg-secondary text-white'>
 					<Column text='模块名称' size='3' />
@@ -397,7 +397,8 @@ export default{
 	.cell{
 		padding:0;
 		>div{
-			padding:2px;
+			padding:1px;
+			// padding:2px; // 2px导致一张纸装不下
 		}
 	}
 }

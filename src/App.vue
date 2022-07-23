@@ -57,6 +57,7 @@
 
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./common.scss";
 import {mapState} from "vuex";
 
@@ -159,7 +160,7 @@ html,body{
 }
 #app{
 	min-height:100%;
-	padding-bottom:80px;
+	padding-bottom:100px;
 }
 .kt-app{
 	width:1024px;
@@ -188,8 +189,8 @@ html,body{
 	padding: 20px 0;
 	font-size:0.875rem;
     line-height: 20px;
-    height:80px;
-    margin-top:-80px;
+    height:100px;
+    margin-top:-100px;
 	visibility: visible!important;
 }
 

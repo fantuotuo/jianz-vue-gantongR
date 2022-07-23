@@ -102,7 +102,9 @@ $w-col-lg:$w-col * 5 - 4 * $w-col-sm;
 
 
 
-
+.el-dialog__body{
+	padding:10px 20px;
+}
 .el-loading-mask{
     font-size:2rem;
 	.el-loading-spinner .el-loading-text{

@@ -6,6 +6,7 @@ const loadingSet=function(bool){
 }
 const http={
 	get: function (url, data) {
+		data = data || {};
 		data.tstamp = new Date().getTime();		// 防止get请求缓存
 
 		return new Promise((resolve,reject)=>{
@@ -31,10 +32,26 @@ const http={
 	},
 	post:function(url,data){
 		// 序列化参数
-		let params=new URLSearchParams();
-		for(let key in data){
-			params.append(key,data[key]);
+		var params;
+		if (window.URLSearchParams) { 
+			params = new window.URLSearchParams();
+			for(let key in data){
+				params.append(key,data[key]);
+			}
+		} else {
+			// ie兼容
+			var ret = '';
+			for (var it in data) {
+				// 如果要发送中文 编码
+				ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+			}
+			ret = ret.substring(0, ret.length - 1);
+			params = ret;
 		}
+		// let params = new URLSearchParams();
+		// for(let key in data){
+		// 	params.append(key,data[key]);
+		// }
 		return new Promise((resolve,reject)=>{
 			loadingSet(true);
 			axios({

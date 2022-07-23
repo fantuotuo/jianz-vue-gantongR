@@ -65,7 +65,18 @@ export default {
 				u_i:this.ui
 			})
 			.then(ret=>{
+                var padStart=false;
+                if(ret.axis.length==1){
+                    // 自动填充开始轴，使得一个点也能连成线
+                    padStart=true;
+                    ret.axis.unshift(ret.axis[0]);
+                }
+                console.log(ret)
 				ret.series.forEach(ser=>{
+                    if(ser.data.length==1 && padStart){
+                        // 自动填充开始轴，使得一个点也能连成线
+                        ser.data.unshift(ser.data[0]);
+                    }
 					// 数据综合考虑之前数据的加权
 					arrSmoothFilter(ser.data);
 					// 防止某一天未进行某个模块的训练，导致数据的空置

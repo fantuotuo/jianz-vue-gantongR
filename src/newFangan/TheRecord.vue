@@ -6,9 +6,9 @@
 
 				<el-button
 					v-for='(item,i) in dates'
-					v-bind:key='item.i'
-					v-on:click='clickDate(item.date)'
-					v-bind:type='date==item.date?"primary":""'
+					:key='item.i'
+					@click='date = item.date'
+					:type='date==item.date?"primary":""'
 					size='mini'
 					style='line-height:1.4'
 				>
@@ -26,10 +26,15 @@
 				</div>
 				<div 
 					v-for='item in getRecord'
-					:key='item.i'
+					:key='item.courseId'
 					class='gt-row'
 				>
-					<Column :text='item.name' size='double' style="justify-content:flex-start" />
+					<Column text='' size='double' style="justify-content:flex-start">
+						<div>
+							<i v-if='item.uploadUser!=""' class='el-icon-s-opportunity'></i>
+							{{item.enName+" "+item.name}}
+						</div>
+					</Column>
 					<Column :text='item.score+""' size='double' />
 					<Column :text='item.goal' size='double' />
 				</div>
@@ -52,17 +57,26 @@ export default{
 	data:function(){
 		return {
 			record:[],
+			date:"",
 		}
 	},
-	props:{
-		date:{
-			type:String,
-			default:""
-		}
+	mounted:function(){
+		this.$store.dispatch("fangan_dates_fatch",{ui:this.ui})
+			.then((dates)=>{
+				if(dates.length>0){
+					this.date = dates[dates.length-1].date;
+				}
+			})
+			.catch(error=>{
+				error;
+				this.$router.push({
+					path:"/"
+				});
+			});
 	},
 	watch:{
 		"date":{
-			immediate:true,
+			immediate:false,
 			handler(){
 				this.dateChange();
 			}
@@ -71,7 +85,7 @@ export default{
 	computed:{
 		...mapState({
 			dates:state=>state.fangan_obj.dates,
-			ui:state=>state.fangan_ui
+			ui:state=>state.fangan_obj.ui
 		}),
 		getRecord(){
 			var record=this.record;
@@ -83,22 +97,15 @@ export default{
 
 			function getIndex(item){
 				for(var k=0;k<record.length;k++){
-					if(record[k].name===item.name){
+					if(record[k].courseId===item.courseId){
 						return k;
 					}
 				}
 				return -1;
 			}
-		}
+		},
 	},
 	methods:{
-		/**
-		 * 点击了某个日期按钮
-		 * @param date 日期
-		*/
-		clickDate(date){
-			this.$emit("clickDate",date);
-		},
 		dateChange(){
 			var date=this.date;
 			
@@ -110,9 +117,17 @@ export default{
 				.then(ret=>{
 					if(ret && ret.code===1){
 						this.record=ret.record;
+					}else{
+						alert(ret)
 					}
 				})
-				.catch(()=>{});
+				.catch(error=>{
+					alert(333)
+					this.$message({
+						text:error,
+						type:"error"
+					})
+				});
 		}
 	},
 	components:{

@@ -1,13 +1,15 @@
 <template>
-    <div>
-        <div class="layout">
+    <div class='custom-choose-wrapper'>
+        <el-dialog :visible='visible' title='配置个性化项目' @close='onClickClose' width='1024px'>
             <div>
-				<div style='text-align:right'>
-					<el-button type="primary" @click="customCourseOpen = true" size='small'>
-						<i class="el-icon-circle-plus"></i>&nbsp;创建自定义项目
-					</el-button>
-				</div>
-				<div class='container-tags row'>
+				<el-alert
+					title='为学员配置个性化项目，点击项目后面的【选择】按钮可将项目添加到训练方案'
+					type="info"
+					style='margin-bottom:15px'
+					:closable='false'>
+				</el-alert>
+
+                <div class='container-tags row'>
 					<div class='col-1' style="font-size:0.9rem;line-height:32px;">模块分类</div>
 					<div class='col-11'>
 						<!-- <el-button-group> -->
@@ -45,10 +47,8 @@
 						<!-- </el-button-group> -->
 					</div>
 				</div>
-
-				<div class='container-tags row form-group'>
+                <div class='container-tags row form-group'>
 					<label for="keySearch" class="col-1 col-form-label">搜索</label>
-
 					<div class='input-group col-3'>
 						<input 
 							v-model="currentKey" 
@@ -70,16 +70,16 @@
 						</div>
 					</div>
 				</div>
-            </div>
 
-				<div class='gt-row head bg-secondary text-white'>
+                <div class='gt-row head bg-secondary text-white'>
 					<Column text='项目名称' size='2' />
 					<Column text='训练目的' size='2' />
 					<Column text='训练教具' size='2' />
 					<Column text='训练时间' size='2' />
-					<Column text='操作方法' size='4' />
+					<Column text='操作方法' size='3' />
+                    <Column text='选择' size='1'/>
 				</div>
-				<div 
+                <div 
 					v-for='(item) in getListCurrent'
 					:key='item.courseId'
 					class='gt-row'
@@ -102,7 +102,7 @@
 					</Column>
 					<Column v-bind:text='item.duration+"分钟"' size='2' />
 					<!-- <Column v-bind:text='item.tip' size='large' type='tip' /> -->
-					<Column text='' size='4' type='tip'>
+					<Column text='' size='3' type='tip'>
 						<el-button :disabled='!item.videoLink' size='mini' @click='onVideoOpen(item.videoLink,item.enName+" "+item.name)'>
 							<i class="el-icon el-icon-film"></i> {{item.videoLink?"查看视频":"暂无视频"}}
 						</el-button>
@@ -116,33 +116,39 @@
 							</el-button>
 						</el-popover>
 					</Column>
+                    <Column size='1'>
+                        <el-button @click='onClickChoose(item)' size='mini' type='primary'>选择</el-button>
+                    </Column>
 				</div>
-		</div>
 
-        <myVideo :open='videoOpen' @onClose='onVideoClose' :videoSrc="videoSrc" :videoTitle="videoTitle" />
-		<custom-course
-			:visible="customCourseOpen"
-			:customNum="getCustomNum"
-			@on-click-close="customCourseOpen = false"
-			@on-submit-done="fetchList(); customCourseOpen = false"
-		></custom-course>
-	</div>
+            </div>
+
+
+            <div slot='footer' class='dialog-footer'>
+                <el-button size='small' @click='onClickClose'>取消</el-button>
+                <!-- <el-button size='small' type='primary' @click='onClickSubmit'>提交</el-button> -->
+            </div>
+
+            <myVideo :open='videoOpen' @onClose='onVideoClose' :videoSrc="videoSrc" :videoTitle="videoTitle" />
+        </el-dialog>
+    </div>
 </template>
+
+
+
 
 <script>
 import {mapState} from "vuex";
-import myVideo from "../components/myVideo.vue";
-import MyImgAid from "../components/MyImgAid.vue";
-import CustomCourse from "../components/CustomCourse.vue";
 import {TAGS1,TAGS2,getCoursesAll} from "../plugins/utils.js";
-
+import myVideo from "./myVideo.vue";
+import MyImgAid from "./MyImgAid.vue";
 
 export default {
-    name:"GaiLan",
+    name:"CustomChoose",
 
     data:function(){
         return {
-			tags1:TAGS1,
+            tags1:TAGS1,
             tags2:TAGS2,
 			currentKey:"",
 			currentTag1: "",
@@ -151,15 +157,17 @@ export default {
             videoSrc:"",
 			videoOpen:false,
 			videoTitle:"",
-
-			customCourseOpen:false,
         }
     },
-	computed:{
-		...mapState({
-			list:state=>state.courses_all
-		}),
-		getListCurrent:function(){
+    props:{
+        visible:Boolean,
+        index:Number,
+    },
+    computed:{
+        ...mapState({
+            list:state=>state.courses_all
+        }),
+        getListCurrent:function(){
 			var currentTag1 = this.currentTag1,
                 currentTag2 = this.currentTag2,
 				currentKey = this.currentKey;
@@ -187,18 +195,29 @@ export default {
 				return match;
 			});
 		},
-		getCustomNum:function(){
-			return this.list.filter(element=>{
-				return element.uploadUser!="";
-			}).length;
-		}
-	},
+    },
     mounted:function(){
-		if(!this.list || this.list.length<=0) this.fetchList();
+        if(!this.list || this.list.length<=0) this.fetchList();
     },
 
 
     methods:{
+        fetchList:function(){
+            getCoursesAll().then(list=>{
+                this.$store.commit("courses_all_set",{courses_all:list});
+            }).catch(error=>{
+                alert(error);
+            });
+        },
+
+        onClickClose:function(){
+            this.$emit("on-click-close");
+        },
+        onClickChoose:function(item){
+            this.$emit("on-click-choose",this.index,item);
+        },
+
+
         getImgs:function(str){
 			if(str){
 				return str.split("、").map((v,k)=>{
@@ -216,18 +235,7 @@ export default {
 		onVideoClose:function(){
 			this.videoOpen=false;
 		},
-
-
-        fetchList:function(){
-			getCoursesAll().then(list=>{
-				this.$store.commit("courses_all_set",{courses_all:list});
-			}).catch(error=>{
-				alert(error);
-			});
-        },
-
-
-		onTouchSearch:function(){
+        onTouchSearch:function(){
 			
         },
         onTouchSearchClear:function(){
@@ -236,16 +244,10 @@ export default {
     },
     components:{
         myVideo,
-		MyImgAid,
-        CustomCourse
+        MyImgAid,
     }
 
-
-
-
-
 }
-
 </script>
 
 <style lang="scss">
@@ -260,6 +262,10 @@ export default {
 		margin-bottom:5px;
 	}
 }
-
+.custom-choose-wrapper{
+    .gt-row{
+        cursor:pointer;
+    }
+}
 
 </style>
